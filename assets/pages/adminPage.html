@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>admin | PAGINA RISERVATA</title>
+    <link rel="shortcut icon" href="/assets/favicon/faviconAdmin.png" type="image/x-icon">
+    <link rel="stylesheet" href="../css/adminStyle.css">
+    <script src="../script/script.js"></script>
+</head>
+<body> 
+    <span id="spann" onclick="openNav()">&#9776;</span>
+    <div id="myNav" class="overlay">
+        <a class="closebtn" onclick="closeNav()" style="user-select:none;">&times;</a>
+        <div class="overlay-content">
+            <a href="social.html">social</a>
+            <a href="licenze.html">licenze</a>
+            <a href="../../index.html">home</a>
+            <br>
+            <button title="clicca per cambiare tema" type="button" onclick="mode()" id="mode">darkmode</button>
+        </div>
+    </div>
+    <div class="top">
+        <h1>Benvenuto ADMIN</h1>
+        <h2>in questa pagina puoi mettere e togliere ogni post della home page e non</h2>
+    </div>
+    <br><br><br>
+    <div class="main">
+        <div class="inserimento">
+          
+            <div class="aggiungi">
+                <div id="myModal" class="modal">
+                    <div class="modal-content">
+                        
+                        <h2>Carica Immagine</h2>
+                        <form id="uploadForm" enctype="multipart/form-data" title="immagine"><br>
+                            <input type="file" name="fileToUpload" id="fileToUpload" accept="image/*" required><br><br>
+                            <input type="text" name="title" id="title" placeholder="Titolo immagine" required><br><br>
+                            <input type="number" name="cost" id="cost" placeholder="Costo (in euro)" required><br><br>
+                            <input type="submit" value="Carica">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div><br><br><br>
+       
+
+
+
+    <script>
+        // Funzione per aprire il modal
+        function openModal(id) {
+            var modal = document.getElementById(id);
+            modal.style.display = "block";
+        }
+
+        // Funzione per chiudere il modal
+        function closeModal(id) {
+            var modal = document.getElementById(id);
+            modal.style.display = "none";
+        }
+
+        // Aggiungi event listener per mostrare il modal quando si clicca su "+"
+        document.querySelector('.aggiungi').addEventListener('click', function() {
+            openModal('myModal');
+        });
+
+        // Aggiungi event listener per chiudere il modal quando si clicca sul pulsante di chiusura
+        document.querySelectorAll('.close').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                closeModal(this.dataset.modalId);
+            });
+        });
+
+        // Aggiungi event listener per chiudere il modal quando si clicca al di fuori del modal
+        window.addEventListener('click', function(event) {
+            var modals = document.querySelectorAll('.modal');
+            modals.forEach(function(modal) {
+                if (event.target == modal) {
+                    closeModal(modal.id);
+                }
+            });
+        });
+
+        // Funzione per gestire il caricamento del file
+        document.getElementById("uploadForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Evita il comportamento predefinito del form
+
+            // Crea un oggetto FormData e aggiungi i dati del form
+            var formData = new FormData(this);
+
+            // Effettua una richiesta AJAX per caricare il file
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "../php/immagini.php", true); // Assicurati di sostituire "upload.php" con il percorso del tuo script PHP per il caricamento delle immagini
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Contenuto da mostrare dopo il caricamento dell'immagine
+                    var response = xhr.responseText;
+                    // Aggiungi il contenuto dove desideri sulla tua pagina
+                    console.log(response); // Mostra la risposta nel console per il debug
+                    // Chiudi il modal dopo il caricamento dell'immagine
+                    closeModal('myModal');
+                }
+            };
+            xhr.send(formData);
+        });
+
+    </script>
+</body>
+</html>
